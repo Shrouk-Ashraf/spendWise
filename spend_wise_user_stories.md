@@ -1,10 +1,10 @@
 # Spend Wise User Story
 
 ## Registration User Stories
-1- As a new user, I want to sign up with email and password, so that I can create my account.
-2- As a returning user, I want to log in with my credentials, so that I can access my data securely.
-3- As a user, I want to reset my password, so that I can recover my account if I forget it.
-4- As a user, I want secure authentication, so that my financial data is protected Using Fingerprint for example.
+1. As a new user, I want to sign up with email and password, so that I can create my account.
+2. As a returning user, I want to log in with my credentials, so that I can access my data securely.
+3. As a user, I want to reset my password, so that I can recover my account if I forget it.
+4. As a user, I want secure authentication, so that my financial data is protected Using Fingerprint for example.
 
 ## Dashboard
 1- As a user, I want to see my total balance, so that I know how much money I have.
