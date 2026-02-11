@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "260719946258",
+    "project_id": "spendwise-54e39",
+    "storage_bucket": "spendwise-54e39.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260719946258:android:10a9551661a7e0604906cb",
+        "android_client_info": {
+          "package_name": "com.example.spendwise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEMRU9DSZHD89VfMl9ohmdcVkmOxH95z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
