@@ -9,18 +9,18 @@ final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
+      name: AppRoutes.onboarding,
       builder: (BuildContext context, GoRouterState state) {
+        debugPrint("Building OnboardingScreen");
         return const OnboardingScreen();
       },
-      redirect: (BuildContext context, GoRouterState state) {
+      redirect: (BuildContext context, GoRouterState state)  {
+        debugPrint("in redirect");
         final box = Hive.box('app_settings');
-        final hasCompletedOnboarding =
-            box.get('completed', defaultValue: false) as bool;
-        if (hasCompletedOnboarding) {
-          return AppRoutes.login;
-        } else {
-          return null;
-        }
+        debugPrint("box is $box");
+        final hasCompleted = box.get('onboarding_completed', defaultValue: false) as bool;
+        debugPrint("hasCompleted is $hasCompleted");
+        return hasCompleted ? AppRoutes.login : AppRoutes.onboarding;
       },
     ),
     GoRoute(

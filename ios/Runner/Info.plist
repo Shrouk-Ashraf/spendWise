@@ -35,6 +35,11 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
+	<key>CFBundleLocalizations</key>
+    <array>
+    	<string>en</string>
+    	<string>ar</string>
+    </array>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
