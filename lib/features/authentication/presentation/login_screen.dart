@@ -46,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (state.status == AuthStatus.success) {
           EasyLoading.dismiss();
           // Navigate to the main app screen or dashboard
+          context.goNamed(AppRoutes.dashboard);
         } else if (state.status == AuthStatus.loading) {
 
           EasyLoading.show();

@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:spendwise/config/routing/app_routes.dart';
 import 'package:spendwise/features/authentication/presentation/login_screen.dart';
 import 'package:spendwise/features/authentication/presentation/signup_screen.dart';
+import 'package:spendwise/features/dashboard/presentation/dashboard.dart';
 import 'package:spendwise/features/onboarding/presentation/onboarding_screen.dart';
 
 import '../../features/authentication/presentation/cubit/auth_cubit.dart';
@@ -40,6 +41,12 @@ final GoRouter router = GoRouter(
       name: AppRoutes.register,
       builder: (context, state) =>
           SignupScreen(),
+    ),
+    GoRoute(
+      path: '/dashboard',
+      name: AppRoutes.dashboard,
+      builder: (context, state) =>
+          DashboardScreen(),
     ),
   ],
 );
