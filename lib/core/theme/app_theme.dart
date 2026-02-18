@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spendwise/core/theme/app_colors.dart';
+import 'package:spendwise/core/theme/app_text_styles.dart';
 
-/// App theme configuration.
-///
-/// Provides light and dark themes for the app.
-/// Access via: `AppTheme.light` or `AppTheme.dark`
 abstract class AppTheme {
   // ─────────────────────────────────────────────────────────────────────────
   // Light Theme
@@ -25,7 +22,7 @@ abstract class AppTheme {
           // onSurface: AppColors.textPrimary,
           // onError: AppColors.textOnPrimary,
         ),
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: AppColors.lightBackgroundColor,
         appBarTheme: const AppBarTheme(
           // backgroundColor: AppColors.surface,
           // foregroundColor: AppColors.textPrimary,
@@ -61,26 +58,32 @@ abstract class AppTheme {
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
+          hintStyle: AppTextStyles.text16NormalGray400,
           filled: true,
-          // fillColor: AppColors.surfaceVariant,
+          fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderSide: const BorderSide(color: AppColors.borderLightColor), // gray-300
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderSide: const BorderSide(color:AppColors.borderLightColor), // gray-300
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            borderSide: const BorderSide(
+              color: AppColors.primary,
+              width: 2,
+            ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            // borderSide: const BorderSide(color: AppColors.error, width: 1),
+            borderSide: const BorderSide(color: Colors.red),
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: AppColors.primary,

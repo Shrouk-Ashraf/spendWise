@@ -60,16 +60,10 @@ class OnboardingScreen extends StatelessWidget {
                   'yourPersonalFinanceManager'.tr(),
                   style: AppTextStyles.text16RegularLightGray,
                 ),
-                Gap(32),
-
-                Text(
-                  'appDescription'.tr(),
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.text16RegularMediumGray,
-                ),
+               Gap(32),
                 Gap(16),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: _features
                       .map((feature) => FeatureItem(label: feature))
                       .toList(),

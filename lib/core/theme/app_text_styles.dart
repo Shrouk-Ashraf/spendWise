@@ -25,9 +25,44 @@ abstract class AppTextStyles {
     color: AppColors.lightGray,
     height: 1.2,
   );
-  static TextStyle text16MediumWhite =TextStyle(
+  static TextStyle text14RegularLightGray = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.normal,
+    color: AppColors.lightGray,
+    height: 1.2,
+  );
+  static TextStyle text14Font500MediumGray = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.mediumGray,
+    height: 1.2,
+  );
+  static TextStyle text14Font500Primary = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.primary,
+    height: 1.2,
+  );
+  static TextStyle text16NormalGray400 = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.normal,
+    color: AppColors.gray400,
+    height: 1.2,
+  );
+  static TextStyle text16MediumWhite = TextStyle(
     color: Colors.white,
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
+  );
+  static TextStyle text24BoldDarkBlue = TextStyle(
+    color: AppColors.darkBlue,
+    fontSize: 24.sp,
+    fontWeight: FontWeight.bold,
+  );
+  static TextStyle text16MediumMediumGray = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.mediumGray,
+    height: 1.2,
   );
 }

@@ -4,7 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spendwise/config/routing/app_routes.dart';
-import 'package:spendwise/core/theme/app_colors.dart';
 import 'package:spendwise/core/theme/app_text_styles.dart';
 import 'package:spendwise/core/utils/components/default_button.dart';
 import 'package:spendwise/core/utils/components/email_text_field.dart';
@@ -13,14 +12,14 @@ import 'package:spendwise/features/authentication/presentation/cubit/auth_cubit.
 
 import '../../../config/di/di.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -46,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (state.status == AuthStatus.success) {
           EasyLoading.dismiss();
           // Navigate to the main app screen or dashboard
-        } else if (state.status == AuthStatus.loading) {
+        } else if(state.status == AuthStatus.loading) {
 
           EasyLoading.show();
         }else {
@@ -68,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'Welcome Back',
+                          'Create Account',
                           textAlign: TextAlign.center,
                           style: AppTextStyles.text24BoldDarkBlue,
                         ),
@@ -77,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'Sign in to your account',
+                          'Sign up to get started with spendWise',
                           textAlign: TextAlign.center,
                           style: AppTextStyles.text16RegularLightGray,
                         ),
@@ -105,10 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // ── Submit Button ───────────────────────────────
                       DefaultButton(
-                        label: 'Sign In',
+                        label: 'Sign Up',
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            AuthCubit.get(context).signIn(
+                            AuthCubit.get(context).signUp(
                               email: _emailController.text,
                               password: _passwordController.text,
                             );
@@ -124,13 +123,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Don't have an account?",
+                            "Already have an account?",
                             style: AppTextStyles.text14RegularLightGray,
                           ),
                           const Gap(4),
                           TextButton(
                             onPressed: () {
-                              context.goNamed(AppRoutes.register);
+                              context.goNamed(AppRoutes.login);
                             },
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
@@ -138,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                             child: Text(
-                              'Sign Up',
+                              'Sign In',
                               style: AppTextStyles.text14Font500Primary,
                             ),
                           ),

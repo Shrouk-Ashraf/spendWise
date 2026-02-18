@@ -14,13 +14,13 @@ class DefaultButton extends StatefulWidget {
 }
 
 class _DefaultButtonState extends State<DefaultButton> {
-  bool _pressed = false;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: GestureDetector(
+        onTap: widget.onPressed,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           decoration: ShapeDecoration(

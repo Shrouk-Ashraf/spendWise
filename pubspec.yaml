@@ -27,6 +27,8 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_screenutil: ^5.9.3
   gap: ^3.0.1
+  equatable: ^2.0.8
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_lints: ^5.0.0
