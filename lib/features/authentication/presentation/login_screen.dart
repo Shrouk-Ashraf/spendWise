@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 import 'package:spendwise/config/routing/app_routes.dart';
 import 'package:spendwise/core/theme/app_colors.dart';
 import 'package:spendwise/core/theme/app_text_styles.dart';
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         } else if (state.status == AuthStatus.success) {
           EasyLoading.dismiss();
-          // Navigate to the main app screen or dashboard
+          Hive.box("app_settings").put("is_logged_in", true);
           context.goNamed(AppRoutes.dashboard);
         } else if (state.status == AuthStatus.loading) {
 
