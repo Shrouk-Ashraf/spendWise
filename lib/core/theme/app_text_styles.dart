@@ -56,8 +56,8 @@ abstract class AppTextStyles {
     color: AppColors.primary,
     height: 1.2,
   );
-  static TextStyle text16NormalGray400 = TextStyle(
-    fontSize: 16.sp,
+  static const TextStyle text16NormalGray400 = TextStyle(
+    fontSize: 16,
     fontWeight: FontWeight.normal,
     color: AppColors.gray400,
     height: 1.2,
@@ -121,6 +121,8 @@ abstract class AppTextStyles {
     color: Colors.grey[500],
   );
 
+
+
   static TextStyle text14MediumBlack = TextStyle(
     fontWeight: FontWeight.w500,
     color: Colors.black87,
@@ -171,7 +173,12 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: AppColors.darkBlue,
   );
-  static TextStyle text13MediumRedColor =TextStyle(
+  static TextStyle text15RegularDarkBlue =TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.normal,
+    color: AppColors.darkBlue,
+  );
+  static const TextStyle text13MediumRedColor =TextStyle(
     color: AppColors.redColor,
     fontSize: 13,
     fontWeight: FontWeight.w500,
@@ -190,10 +197,17 @@ abstract class AppTextStyles {
       color: AppColors.darkBlue);
 
   static TextStyle text12RegularGray500 = TextStyle(fontSize: 12, color: AppColors.gray500,);
+  static TextStyle text12SemiBoldGray500 = TextStyle(fontSize: 12, fontWeight: FontWeight.w600,color: AppColors.gray500,);
 
 static TextStyle text22BoldDarkBlue = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.bold,
     color: AppColors.darkBlue,
+  );
+
+static const TextStyle text26BoldWhite = TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
   );
 }

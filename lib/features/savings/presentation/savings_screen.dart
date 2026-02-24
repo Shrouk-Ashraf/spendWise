@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spendwise/features/savings/presentation/widgets/savings_overview_card.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -58,7 +59,12 @@ class SavingsScreen extends StatelessWidget {
           children: [
 
             // ── Overview Card ──────────────────────────────────
-            SavingsOverviewCard()
+            SavingsOverviewCard(
+              totalTarget: totalTarget,
+              totalSaved: totalSaved,
+              overallPct: overallPct,
+              remaining: remaining,
+            ),
 
             const Gap(32),
 

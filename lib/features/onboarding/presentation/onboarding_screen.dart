@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spendwise/config/di/di.dart';
 import 'package:spendwise/config/routing/app_routes.dart';
 import 'package:spendwise/core/theme/app_colors.dart';
 import 'package:spendwise/core/utils/components/default_button.dart';
@@ -72,8 +73,7 @@ class OnboardingScreen extends StatelessWidget {
                 Gap(32),
                 DefaultButton(
                   onPressed: () async {
-                    final box = Hive.box('app_settings');
-                    await box.put('onboarding_completed', true);
+                    sl<SharedPreferences>().setBool('onboarding_completed', true);
                     context.goNamed(AppRoutes.login);
                   },
                   label: "getStarted".tr(),

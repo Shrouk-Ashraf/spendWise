@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spendwise/config/routing/app_routes.dart';
 import 'package:spendwise/core/theme/app_colors.dart';
 import 'package:spendwise/features/dashboard/presentation/widgets/balance_card.dart';
 import 'package:spendwise/features/dashboard/presentation/widgets/dashboard_header.dart';
@@ -82,7 +83,7 @@ class DashboardScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.go('/add-transaction'),
+        onPressed: () => context.goNamed(AppRoutes.addTransaction),
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add, size: 28, color: Colors.white),
       ),

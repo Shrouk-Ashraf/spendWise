@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spendwise/config/routing/app_routes.dart';
 import 'package:spendwise/features/authentication/presentation/login_screen.dart';
 import 'package:spendwise/features/authentication/presentation/signup_screen.dart';
@@ -10,15 +10,29 @@ import '../../features/layout/presentation/scaffold_with_bottom_nav.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/reports/presentation/reports_screen.dart';
 import '../../features/savings/presentation/savings_screen.dart';
+import '../../features/transactions/add_transaction/add_transaction_screen.dart';
+import '../di/di.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/dashboard',
+  initialLocation: '/onboarding',
   redirect: (context,state){
-    final box = Hive.box('app_settings');
-    final hasCompleted = box.get(
-        'onboarding_completed', defaultValue: false) as bool;
-    final bool isLoggedIn = box.get('is_logged_in', defaultValue: false) as bool;
-    return hasCompleted ? (isLoggedIn?null: AppRoutes.login ): AppRoutes.onboarding;
+    final prefs = sl<SharedPreferences>();
+    final hasCompleted = prefs.getBool('onboarding_completed') ?? false;
+    final isLoggedIn   = prefs.getBool('is_logged_in')         ?? false;
+    final location = state.matchedLocation;
+    if (!hasCompleted) {
+      return location == '/onboarding' ? null : '/onboarding';
+    }
+    const authRoutes = {'/login', '/register'};
+    if (!isLoggedIn) {
+      return authRoutes.contains(location) ? null : '/login';
+    }
+
+    if (isLoggedIn && authRoutes.contains(location)) {
+      return '/dashboard';
+    }
+
+    return null;
   },
   routes: <RouteBase>[
     // ── Onboarding ───────────────────────────────────────────────────────────
@@ -72,11 +86,11 @@ final GoRouter router = GoRouter(
     ),
 
     // // ── Secondary Screens (no Bottom Nav) ────────────────────────────────────
-    // GoRoute(
-    //   path: '/add-transaction',
-    //   name: AppRoutes.addTransaction,
-    //   builder: (context, state) => const AddTransactionScreen(),
-    // ),
+    GoRoute(
+      path: '/add-transaction',
+      name: AppRoutes.addTransaction,
+      builder: (context, state) => const AddTransactionScreen(),
+    ),
     // GoRoute(
     //   path: '/add-budget',
     //   name: AppRoutes.addBudget,

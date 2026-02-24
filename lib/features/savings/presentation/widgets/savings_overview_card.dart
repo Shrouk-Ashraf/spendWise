@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class SavingsOverviewCard extends StatelessWidget {
-  const SavingsOverviewCard({super.key});
+  final double totalTarget;
+  final double totalSaved;
+  final double overallPct;
+  final double remaining;
+  const SavingsOverviewCard({super.key, required this.totalTarget, required this.totalSaved, required this.overallPct, required this.remaining});
 
   @override
   Widget build(BuildContext context) {

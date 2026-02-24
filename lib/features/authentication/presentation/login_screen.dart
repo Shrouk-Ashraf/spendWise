@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spendwise/config/routing/app_routes.dart';
-import 'package:spendwise/core/theme/app_colors.dart';
 import 'package:spendwise/core/theme/app_text_styles.dart';
 import 'package:spendwise/core/utils/components/default_button.dart';
 import 'package:spendwise/core/utils/components/email_text_field.dart';
@@ -46,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         } else if (state.status == AuthStatus.success) {
           EasyLoading.dismiss();
-          Hive.box("app_settings").put("is_logged_in", true);
+          sl<SharedPreferences>().setBool('is_logged_in', true);
           context.goNamed(AppRoutes.dashboard);
         } else if (state.status == AuthStatus.loading) {
 
@@ -132,6 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           const Gap(4),
                           TextButton(
                             onPressed: () {
+                              debugPrint("test sign up");
                               context.goNamed(AppRoutes.register);
                             },
                             style: TextButton.styleFrom(

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hive/hive.dart';
 
 class ErrorHandler {
 
@@ -14,11 +13,6 @@ class ErrorHandler {
     // Firestore / Firebase
     if (e is FirebaseException) {
       return handleFirestoreError(e);
-    }
-
-    // Hive / Local Storage
-    if (e is HiveError) {
-      return handleHiveError(e);
     }
 
     // Network
@@ -156,28 +150,6 @@ class ErrorHandler {
     }
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // HIVE / LOCAL STORAGE ERRORS
-  // ─────────────────────────────────────────────────────────────────────────
-
-  /// Handles Hive local storage errors.
-  static String handleHiveError(Object e) {
-    if (e is HiveError) {
-      // Check for specific Hive error messages
-      final message = e.toString().toLowerCase();
-
-      if (message.contains('box not found') ||
-          message.contains('box is not open')) {
-        return 'Local storage not initialized. Please restart the app.';
-      }
-      if (message.contains('corrupted')) {
-        return 'Local data is corrupted. Please clear app data.';
-      }
-
-      return 'Local storage error. Please restart the app.';
-    }
-    return 'Unexpected local storage error.';
-  }
 
   // ─────────────────────────────────────────────────────────────────────────
   // NETWORK ERRORS

@@ -23,24 +23,44 @@ dependencies:
   flutter_bloc: ^9.1.0
   get_it: ^9.2.0
   go_router: ^17.0.1
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
   flutter_screenutil: ^5.9.3
   gap: ^3.0.1
   equatable: ^2.0.8
   flutter_easyloading: ^3.0.5
+  shared_preferences: ^2.5.4
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.9
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+  min_sdk_android: 21
+  web:
+    generate: false
+
+flutter_native_splash:
+  color: "#4CAF50"
+  image: assets/images/spendwise_logo.png
+  android_12:
+    color: "#4CAF50"
+    icon_background_color: "#4CAF50"
+    image: assets/images/logo.png
+    # ✅ This makes the icon fill properly inside the circle
+    android12_icon_size: 0
+  fullscreen: true
 
 flutter:
 
   uses-material-design: true
   assets:
      - assets/translations/
+     - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
