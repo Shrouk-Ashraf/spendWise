@@ -11,6 +11,7 @@ import 'package:spendwise/core/theme/app_theme.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'core/theme/app_colors.dart';
 import 'features/authentication/presentation/cubit/auth_cubit.dart';
+import 'features/transactions/presentation/add_transaction/cubit/add_transaction_cubit.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {

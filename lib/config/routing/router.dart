@@ -5,12 +5,14 @@ import 'package:spendwise/features/authentication/presentation/login_screen.dart
 import 'package:spendwise/features/authentication/presentation/signup_screen.dart';
 import 'package:spendwise/features/dashboard/presentation/dashboard.dart';
 import 'package:spendwise/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:spendwise/features/transactions/presentation/get_transaction/transactions_screen.dart';
+import 'package:spendwise/features/transactions/presentation/transaction_details/presentation/transaction_details_screen.dart';
 import '../../features/budgets/presentation/budget_screen.dart';
 import '../../features/layout/presentation/scaffold_with_bottom_nav.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/reports/presentation/reports_screen.dart';
 import '../../features/savings/presentation/savings_screen.dart';
-import '../../features/transactions/add_transaction/add_transaction_screen.dart';
+import '../../features/transactions/presentation/add_transaction/add_transaction_screen.dart';
 import '../di/di.dart';
 
 final GoRouter router = GoRouter(
@@ -108,19 +110,19 @@ final GoRouter router = GoRouter(
     // ),
     //
     // // ── Transaction Screens ───────────────────────────────────────────────────
-    // GoRoute(
-    //   path: '/transactions',
-    //   name: AppRoutes.transactions,
-    //   builder: (context, state) => const AllTransactionsScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/transaction/:id',
-    //   name: AppRoutes.transactionDetail,
-    //   builder: (context, state) {
-    //     final id = state.pathParameters['id']!;
-    //     return TransactionDetailScreen(id: id);
-    //   },
-    // ),
+    GoRoute(
+      path: '/transactions',
+      name: AppRoutes.transactions,
+      builder: (context, state) => const AllTransactionsScreen(),
+    ),
+    GoRoute(
+      path: '/transaction-detail',
+      name: AppRoutes.transactionDetail,
+      builder: (context, state) {
+        final id = state.extra as String;
+        return TransactionDetailScreen(id: id);
+      },
+    ),
 
   ],
 );

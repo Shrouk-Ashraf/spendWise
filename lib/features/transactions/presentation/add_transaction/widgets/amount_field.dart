@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'section_card.dart';
-import 'field_label.dart';
+import 'package:spendwise/features/transactions/presentation/add_transaction/widgets/field_label.dart';
+import 'package:spendwise/features/transactions/presentation/add_transaction/widgets/section_card.dart';
 
 class AmountField extends StatelessWidget {
   const AmountField({super.key, required this.controller});

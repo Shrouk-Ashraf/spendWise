@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spendwise/config/routing/app_routes.dart';
 import 'package:spendwise/core/theme/app_colors.dart';
+import 'package:spendwise/features/transactions/data/models/transaction_model.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../data/models/transaction_model.dart';
 
 class RecentTransactions extends StatelessWidget {
-  final List<Transaction> recentTransactions;
+  final List<TransactionModel> recentTransactions;
   const RecentTransactions({super.key, required this.recentTransactions});
 
   @override
@@ -24,7 +25,7 @@ class RecentTransactions extends StatelessWidget {
                 style: AppTextStyles.text18SemiBoldBlack,
               ),
               TextButton(
-                onPressed: () => context.go('/transactions'),
+                onPressed: () => context.pushNamed(AppRoutes.transactions),
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   minimumSize: Size.zero,
@@ -60,8 +61,8 @@ class RecentTransactions extends StatelessWidget {
               itemBuilder: (context, index) {
                 final transaction = recentTransactions[index];
                 return InkWell(
-                  onTap: () =>
-                      context.go('/transaction/${transaction.id}'),
+                  onTap: () =>context.pushNamed(AppRoutes.transactionDetail,
+                      extra:transaction.id),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -76,7 +77,7 @@ class RecentTransactions extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
-                            transaction.icon,
+                            transaction.categoryIcon,
                             color: transaction.type == 'income'
                                 ? AppColors.primary
                                 : Colors.grey[600],

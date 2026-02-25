@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class TransactionModel {
   final String id;
   final String type; // 'income' or 'expense'
@@ -5,6 +7,7 @@ class TransactionModel {
   final String category;
   final DateTime date;
   final String notes;
+  final IconData categoryIcon;
 
   const TransactionModel({
     required this.id,
@@ -13,6 +16,7 @@ class TransactionModel {
     required this.category,
     required this.date,
     required this.notes,
+    required this.categoryIcon,
   });
 
   bool get isIncome => type == 'income';
@@ -27,6 +31,7 @@ class TransactionModel {
       'category': category,
       'date':     date.millisecondsSinceEpoch,
       'notes':    notes,
+      'categoryIcon': categoryIcon,
     };
   }
 
@@ -38,6 +43,7 @@ class TransactionModel {
       category: map['category'],
       date:     DateTime.fromMillisecondsSinceEpoch(map['date']),
       notes:    map['notes'] ?? '',
+      categoryIcon: map['categoryIcon'] ?? Icons.category,
     );
   }
 
@@ -48,6 +54,7 @@ class TransactionModel {
     String?   category,
     DateTime? date,
     String?   notes,
+    IconData?    categoryIcon,
   }) {
     return TransactionModel(
       id:       id       ?? this.id,
@@ -56,6 +63,7 @@ class TransactionModel {
       category: category ?? this.category,
       date:     date     ?? this.date,
       notes:    notes    ?? this.notes,
+      categoryIcon: categoryIcon ?? this.categoryIcon,
     );
   }
 }

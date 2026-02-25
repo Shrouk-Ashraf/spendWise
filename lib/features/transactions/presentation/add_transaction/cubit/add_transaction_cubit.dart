@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/transaction_model.dart';
-import '../../data/repository/transactions_repository.dart';
+import '../../../data/models/transaction_model.dart';
+import '../../../data/repository/transactions_repository.dart';
 import 'add_transaction_state.dart';
 
-class TransactionCubit extends Cubit<TransactionState> {
+class AddTransactionCubit extends Cubit<AddTransactionState> {
   final TransactionRepository _repository;
 
-  TransactionCubit(this._repository) : super(const TransactionState());
+  AddTransactionCubit(this._repository) : super(const AddTransactionState());
 
-  static TransactionCubit get(BuildContext context) =>
-      context.read<TransactionCubit>();
+  static AddTransactionCubit get(BuildContext context) =>
+      context.read<AddTransactionCubit>();
 
   // ── Load all ──────────────────────────────────────────────────────────────
   void loadTransactions() {
@@ -28,6 +28,35 @@ class TransactionCubit extends Cubit<TransactionState> {
         ),
       ),
     );
+  }
+
+  // ── Currency helpers (use TransactionRepository to fetch symbols) ─────────
+  Future<void> loadCurrencySymbols(
+      {required String accessKey, String baseUrl = 'https://api.exchangeratesapi.io/v1'}) async {
+    emit(state.copyWith(currencyStatus: CurrencyStatus.loading));
+
+    final result = await _repository.fetchCurrencySymbols(
+        accessKey: accessKey, baseUrl: baseUrl);
+    result.fold(
+      (error) => emit(state.copyWith(
+          currencyStatus: CurrencyStatus.error,
+          currencyErrorMessage: error)),
+      (symbols) {
+        // pick a sensible default currency if available
+        final defaultCurrency = symbols.containsKey('USD')
+            ? 'USD'
+            : (symbols.keys.isNotEmpty ? symbols.keys.first : null);
+        emit(state.copyWith(
+            currencyStatus: CurrencyStatus.success,
+            //get first 15 symbols to avoid overwhelming the user with USD for sure as it is needed
+            currencySymbols: Map.fromEntries(symbols.entries.take(10)),
+            ));
+      },
+    );
+  }
+
+  void setSelectedCurrency(String currencyCode) {
+    emit(state.copyWith(selectedCurrency: currencyCode));
   }
 
   // ── Add ───────────────────────────────────────────────────────────────────

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import '../models/transaction_model.dart';
 
 class TransactionDataSource {
@@ -57,5 +58,39 @@ class TransactionDataSource {
   // ── Clear everything ──────────────────────────────────────────────────────
   Future<void> clearAll() async {
     await _prefs.remove(_key);
+  }
+
+
+  Future<TransactionModel> getTransactionById(String id) async {
+    final transactions = getAll();
+    return transactions.firstWhere((t) => t.id == id,
+        orElse: () => throw Exception('Transaction not found'));
+
+  }
+
+  /// Fetch currency symbols from exchangeratesapi.io
+  ///
+  /// `accessKey` is required by the API. Optional `baseUrl` defaults to
+  /// https://api.exchangeratesapi.io/v1
+  Future<Map<String, String>> fetchCurrencySymbols({
+    required String accessKey,
+    String baseUrl = 'https://api.exchangeratesapi.io/v1',
+  }) async {
+    final uri = Uri.parse('$baseUrl/symbols?access_key=$accessKey');
+    final resp = await http.get(uri);
+
+    if (resp.statusCode != 200) {
+      throw Exception('Failed to fetch symbols: ${resp.statusCode}');
+    }
+
+    final Map<String, dynamic> body = jsonDecode(resp.body);
+    if (body['success'] != true) {
+      // API may return error details; include them when present
+      final error = body['error'] != null ? body['error'].toString() : body.toString();
+      throw Exception('API error: $error');
+    }
+
+    final Map<String, dynamic> symbols = body['symbols'] ?? {};
+    return symbols.map((k, v) => MapEntry(k, v.toString()));
   }
 }

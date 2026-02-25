@@ -1,13 +1,13 @@
-import '../../data/models/transaction_model.dart';
+import '../../../data/models/transaction_model.dart';
 
 enum TransactionStatus { initial, loading, success, error }
 
-class TransactionState {
+class TransactionsState {
   final TransactionStatus status;
   final List<TransactionModel> transactions;
   final String? errorMessage;
 
-  const TransactionState({
+  const TransactionsState({
     this.status       = TransactionStatus.initial,
     this.transactions = const [],
     this.errorMessage,
@@ -27,12 +27,12 @@ class TransactionState {
   List<TransactionModel> get recentTransactions =>
       transactions.take(5).toList();
 
-  TransactionState copyWith({
+  TransactionsState copyWith({
     TransactionStatus?      status,
     List<TransactionModel>? transactions,
     String?                 errorMessage,
   }) {
-    return TransactionState(
+    return TransactionsState(
       status:       status       ?? this.status,
       transactions: transactions ?? this.transactions,
       errorMessage: errorMessage,
