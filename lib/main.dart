@@ -7,15 +7,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spendwise/config/di/di.dart';
 import 'package:spendwise/config/routing/router.dart';
+import 'package:spendwise/core/networking/notification_service.dart';
 import 'package:spendwise/core/theme/app_theme.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'core/theme/app_colors.dart';
+import 'package:spendwise/core/theme/theme_cubit.dart';
+import 'package:spendwise/core/theme/theme_state.dart';
 import 'features/authentication/presentation/cubit/auth_cubit.dart';
 import 'features/transactions/presentation/add_transaction/cubit/add_transaction_cubit.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Firebase.initializeApp(
@@ -52,24 +56,31 @@ class SpendWiseApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         builder: (_, child) {
-          return BlocProvider(
-            create: (context) => sl<AuthCubit>(),
-            child: MaterialApp.router(
-              // App Info
-              title: 'spendwise',
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              // Theme
-              theme: AppTheme.light,
-              darkTheme: AppTheme.dark,
-              themeMode: ThemeMode.system,
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: sl<AuthCubit>()),
+              BlocProvider.value(value: sl<ThemeCubit>()),
+            ],
+            child: BlocBuilder<ThemeCubit, ThemeState>(
+              builder: (context, themeState) {
+                return MaterialApp.router(
+                  // App Info
+                  title: 'spendwise',
+                  debugShowCheckedModeBanner: false,
+                  localizationsDelegates: context.localizationDelegates,
+                  supportedLocales: context.supportedLocales,
+                  locale: context.locale,
+                  // Theme
+                  theme: AppTheme.light,
+                  darkTheme: AppTheme.dark,
+                  themeMode: themeState.themeMode,
 
-              // Routing
-              routerConfig: router,
+                  // Routing
+                  routerConfig: router,
 
-              builder: EasyLoading.init(),
+                  builder: EasyLoading.init(),
+                );
+              },
             ),
           );
         }

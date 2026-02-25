@@ -1,154 +1,176 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spendwise/config/di/di.dart';
+import 'package:spendwise/config/routing/app_routes.dart';
 import 'package:spendwise/core/theme/app_colors.dart';
+import 'package:spendwise/core/theme/app_text_styles.dart';
+import 'package:spendwise/core/theme/theme_cubit.dart';
+import 'package:spendwise/core/theme/theme_state.dart';
+import 'package:spendwise/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:spendwise/features/profile/presentation/cubit/profile_state.dart';
 import 'package:spendwise/features/profile/presentation/widgets/user_info_card.dart';
 
-import '../../../core/theme/app_text_styles.dart';
-
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  bool _notifications = true;
-  bool _darkMode = false;
-
-  void _handleLogout() {
-    // TODO: clear Hive session then navigate
-    context.go('/login');
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        scrolledUnderElevation: 0,
-
-        title:Text(
-          'Profile & Settings',
-          style: AppTextStyles.text20SemiBoldDarkBlue,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => sl<ProfileCubit>()..loadProfile(),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              // ── User Info Card ─────────────────────────────────
-              UserInfoCard(),
-
-              const Gap(32),
-
-              // ── App Preferences ────────────────────────────────
-              _SectionLabel(label: 'App Preferences'),
-              const Gap(12),
-              _SettingsGroup(
-                children: [
-                  _ToggleRow(
-                    icon: Icons.notifications_rounded,
-                    label: 'Notifications',
-                    value: _notifications,
-                    onChanged: (v) => setState(() => _notifications = v),
-                    hasDivider: true,
-                  ),
-                  _ToggleRow(
-                    icon: Icons.dark_mode_rounded,
-                    label: 'Dark Mode',
-                    value: _darkMode,
-                    onChanged: (v) => setState(() => _darkMode = v),
-                  ),
-                ],
+      ],
+      child: BlocListener<ProfileCubit, ProfileState>(
+        listener: (context, state) {
+          if (state.status == ProfileStatus.loggedOut) {
+            context.goNamed(AppRoutes.login);
+          }
+          if (state.status == ProfileStatus.passwordResetSent) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                    'Password reset email sent! Check your inbox.'),
+                backgroundColor: AppColors.primary,
               ),
-
-              const Gap( 24),
-
-              // ── Account Settings ───────────────────────────────
-              _SectionLabel(label: 'Account Settings'),
-              const Gap( 12),
-              _SettingsGroup(
-                children: [
-                  _NavRow(
-                    icon: Icons.person_rounded,
-                    label: 'Edit Profile',
-                    onTap: () {},
-                    hasDivider: true,
-                  ),
-                  _NavRow(
-                    icon: Icons.lock_rounded,
-                    label: 'Change Password',
-                    onTap: () {},
-                  ),
-                ],
+            );
+          }
+          if (state.status == ProfileStatus.error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                    state.errorMessage ?? 'Something went wrong'),
+                backgroundColor: AppColors.redColor,
               ),
+            );
+          }
+        },
 
-              const Gap( 24),
-
-              // ── Support ────────────────────────────────────────
-              _SectionLabel(label: 'Support'),
-              const Gap( 12),
-              _SettingsGroup(
-                children: [
-                  _NavRow(
-                    icon: Icons.help_outline_rounded,
-                    label: 'Help & FAQ',
-                    onTap: () {},
-                  ),
-                ],
+       child : BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            return Scaffold(
+              backgroundColor: AppColors.lightBackgroundColor,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                scrolledUnderElevation: 0,
+                title: Text(
+                  'Profile & Settings',
+                  style: AppTextStyles.text20SemiBoldDarkBlue,
+                ),
               ),
+              body: state.status == ProfileStatus.loading
+                  ? const Center(
+                  child: CircularProgressIndicator(
+                      color: AppColors.primary))
+                  : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-              const Gap( 24),
+                      // ── User Info Card ──────────────────
+                      UserInfoCard(
+                        name:          state.name,
+                        email:         state.email,
+                        avatarInitial: state.avatarInitial,
+                      ),
 
-              // ── Logout Button ──────────────────────────────────
-              SizedBox(
-                width: double.infinity,
-                child: TextButton.icon(
-                  onPressed: _handleLogout,
-                  icon: const Icon(Icons.logout_rounded,
-                      color: AppColors.redColor, size: 20),
-                  label: const Text(
-                    'Log Out',
-                    style: AppTextStyles.text13MediumRedColor,
-                  ),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                      const Gap(32),
+
+                      // ── App Preferences ─────────────────
+                      const _SectionLabel(
+                          label: 'App Preferences'),
+                      const Gap(12),
+                      _SettingsGroup(
+                        children: [
+
+                          // ── Notifications ───────────────
+                        _ToggleRow(
+                        icon: Icons.notifications_rounded,
+                        label: 'Notifications',
+                        hasDivider: true,
+                        value: state.notificationsEnabled,
+                        onChanged: (v) =>
+                            ProfileCubit.get(context)
+                                .toggleNotifications(v),
+                      ),
+
+                          // ── Dark Mode ───────────────────
+                          BlocBuilder<ThemeCubit, ThemeState>(
+                            builder: (context, themeState) {
+                              return _ToggleRow(
+                                icon: Icons.dark_mode_rounded,
+                                label: 'Dark Mode',
+                                value: themeState.themeMode ==
+                                    ThemeMode.dark,
+                                onChanged: (_) => context
+                                    .read<ThemeCubit>()
+                                    .toggle(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+
+                      const Gap(24),
+
+
+
+                      // ── Logout ────────────────────────────
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton.icon(
+                          onPressed: () =>
+                              ProfileCubit.get(context).logout(),
+                          icon: const Icon(Icons.logout_rounded,
+                              color: AppColors.redColor, size: 20),
+                          label: const Text(
+                            'Log Out',
+                            style:
+                            AppTextStyles.text13MediumRedColor,
+                          ),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16),
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const Gap(20),
+
+                      // ── Version ───────────────────────────
+                      const Center(
+                        child: Text(
+                          'Spend Wise v1.0.0',
+                          style: AppTextStyles.text16NormalGray400,
+                        ),
+                      ),
+
+                      const Gap(32),
+                    ],
                   ),
                 ),
               ),
-
-              const Gap( 20),
-
-              // ── Version ────────────────────────────────────────
-              const Center(
-                child: Text(
-                  'Spend Wise v1.0.0',
-                  style: AppTextStyles.text16NormalGray400,
-                ),
-              ),
-
-              const Gap( 32),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
 }
 
-// ── Reusable Widgets ─────────────────────────────────────────────────────────
+// ── Reusable Widgets ──────────────────────────────────────────────────────────
 
 class _SectionLabel extends StatelessWidget {
   const _SectionLabel({required this.label});
@@ -160,7 +182,7 @@ class _SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4),
       child: Text(
         label.toUpperCase(),
-        style: AppTextStyles.text12SemiBoldGray500
+        style: AppTextStyles.text12SemiBoldGray500,
       ),
     );
   }
@@ -189,7 +211,6 @@ class _SettingsGroup extends StatelessWidget {
   }
 }
 
-// Row with a toggle switch
 class _ToggleRow extends StatelessWidget {
   const _ToggleRow({
     required this.icon,
@@ -199,27 +220,26 @@ class _ToggleRow extends StatelessWidget {
     this.hasDivider = false,
   });
 
-  final IconData icon;
-  final String label;
-  final bool value;
+  final IconData           icon;
+  final String             label;
+  final bool               value;
   final ValueChanged<bool> onChanged;
-  final bool hasDivider;
+  final bool               hasDivider;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+              horizontal: 16, vertical: 4),
           child: Row(
             children: [
-              Icon(icon, size: 20, color:  AppColors.lightGray),
-              const Gap( 12),
+              Icon(icon, size: 20, color: AppColors.lightGray),
+              const Gap(12),
               Expanded(
-                child: Text(
-                  label,
-                  style: AppTextStyles.text15RegularDarkBlue,
-                ),
+                child: Text(label,
+                    style: AppTextStyles.text15RegularDarkBlue),
               ),
               Switch.adaptive(
                 value: value,
@@ -230,54 +250,8 @@ class _ToggleRow extends StatelessWidget {
           ),
         ),
         if (hasDivider)
-          const Divider(height: 1, indent: 48, color: AppColors.semiWhite),
-      ],
-    );
-  }
-}
-
-// Row with a chevron (navigation)
-class _NavRow extends StatelessWidget {
-  const _NavRow({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.hasDivider = false,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final bool hasDivider;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(20),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 16, vertical: 16),
-            child: Row(
-              children: [
-                Icon(icon, size: 20, color: AppColors.lightGray),
-                const Gap( 12),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: AppTextStyles.text15RegularDarkBlue,
-                  ),
-                ),
-                const Icon(Icons.chevron_right_rounded,
-                    size: 20, color:AppColors.gray400),
-              ],
-            ),
-          ),
-        ),
-        if (hasDivider)
-          const Divider(height: 1, indent: 48, color: AppColors.semiWhite),
+          const Divider(
+              height: 1, indent: 48, color: AppColors.semiWhite),
       ],
     );
   }

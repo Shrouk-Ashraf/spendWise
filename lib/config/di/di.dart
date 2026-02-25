@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spendwise/core/theme/theme_cubit.dart';
 import 'package:spendwise/features/authentication/data/data_source/auth_data_source.dart';
 import 'package:spendwise/features/dashboard/data/data_source/dashboard_data_source.dart';
 import 'package:spendwise/features/dashboard/data/repository/dashboard_repository.dart';
 import 'package:spendwise/features/dashboard/presentation/cubit/dashboard_cubit.dart';
+import 'package:spendwise/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:spendwise/features/transactions/presentation/add_transaction/cubit/add_transaction_cubit.dart';
 import 'package:spendwise/features/transactions/presentation/get_transaction/cubit/get_transactions_cubit.dart';
 import 'package:spendwise/features/transactions/presentation/transaction_details/cubit/transaction_details_cubit.dart';
@@ -20,6 +22,8 @@ final sl = GetIt.instance;
 Future<void> setupDI(SharedPreferences prefs) async {
   // SharedPreferences instance
   sl.registerSingleton<SharedPreferences>(prefs);
+  // Theme cubit depends on SharedPreferences
+  sl.registerLazySingleton(() => ThemeCubit(sl()));
   // Firebase
   sl.registerLazySingleton(() => FirebaseAuth.instance);
 
@@ -31,6 +35,7 @@ Future<void> setupDI(SharedPreferences prefs) async {
 
   // Cubit
   sl.registerLazySingleton<AuthCubit>(() => AuthCubit(sl()));
+  sl.registerFactory(() => ProfileCubit(sl(),sl()));
 
   sl.registerLazySingleton(() => TransactionDataSource(sl()));
   sl.registerLazySingleton(() => TransactionRepository(sl()));

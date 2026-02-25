@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
 class UserInfoCard extends StatelessWidget {
-  const UserInfoCard({super.key});
+  const UserInfoCard({
+    super.key,
+    required this.name,
+    required this.email,
+    required this.avatarInitial,
+  });
+
+  final String name;
+  final String email;
+  final String avatarInitial;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +32,7 @@ class UserInfoCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Avatar
+          // ── Avatar ───────────────────────────────────────────
           Container(
             width: 64,
             height: 64,
@@ -32,33 +40,32 @@ class UserInfoCard extends StatelessWidget {
               color: AppColors.primary,
               shape: BoxShape.circle,
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                'A',
-                style: AppTextStyles.text26BoldWhite
+                avatarInitial,
+                style: AppTextStyles.text26BoldWhite,
               ),
             ),
           ),
           const Gap(16),
 
-          // Name + email
-           Expanded(
+          // ── Name + Email ──────────────────────────────────────
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Alex Johnson',
+                  name,
                   style: AppTextStyles.text18SemiBoldDarkBlue,
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
-                  'alex.johnson@email.com',
+                  email,
                   style: AppTextStyles.text13RegularGrey500,
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );

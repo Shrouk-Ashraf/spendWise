@@ -5,6 +5,7 @@ import 'package:spendwise/config/di/di.dart';
 import 'package:spendwise/config/routing/app_routes.dart';
 import 'package:spendwise/core/theme/app_colors.dart';
 import 'package:spendwise/features/dashboard/presentation/cubit/dashboard_cubit.dart';
+import 'package:spendwise/features/dashboard/presentation/widgets/app_drawer.dart';
 import 'package:spendwise/features/dashboard/presentation/widgets/balance_card.dart';
 import 'package:spendwise/features/dashboard/presentation/widgets/dashboard_header.dart';
 import 'package:spendwise/features/dashboard/presentation/widgets/quick_actions.dart';
@@ -27,6 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   create: (context) => sl<DashboardCubit>()..loadRecent(),
   child: Scaffold(
       backgroundColor: AppColors.lightBackgroundColor,
+    drawer: const AppDrawer(),
       body: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
           return
@@ -36,7 +38,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
-                DashboardHeader(),
+                DashboardHeader(
+                  onMenuTap: () => Scaffold.of(context).openDrawer(),
+                ),
 
                 // Balance Card
                 BalanceCard(totalBalance: state.balance,

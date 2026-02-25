@@ -28,6 +28,8 @@ dependencies:
   equatable: ^2.0.8
   flutter_easyloading: ^3.0.5
   shared_preferences: ^2.5.4
+  permission_handler: ^12.0.1
+  flutter_local_notifications: ^20.1.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
@@ -45,13 +47,12 @@ flutter_launcher_icons:
     generate: false
 
 flutter_native_splash:
-  color: "#4CAF50"
-  image: assets/images/spendwise_logo.png
+  color: "#FFFFFF"
+  image: assets/images/splash_logo.png
   android_12:
-    color: "#4CAF50"
-    icon_background_color: "#4CAF50"
+    color: "#FFFFFF"
+    icon_background_color: "#FFFFFF"
     image: assets/images/logo.png
-    android12_icon_size: 0
   fullscreen: true
 
 flutter:
