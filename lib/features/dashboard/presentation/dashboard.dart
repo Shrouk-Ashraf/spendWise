@@ -19,54 +19,62 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+      // Load recent transactions when the dashboard is first displayed
+      context.read<DashboardCubit>().loadRecent();
+  }
 
   @override
   Widget build(BuildContext context) {
 
 
-    return BlocProvider(
-  create: (context) => sl<DashboardCubit>()..loadRecent(),
-  child: Scaffold(
-      backgroundColor: AppColors.lightBackgroundColor,
-    drawer: const AppDrawer(),
-      body: BlocBuilder<DashboardCubit, DashboardState>(
-        builder: (context, state) {
-          return
+    return Scaffold(
+        backgroundColor: AppColors.lightBackgroundColor,
+      drawer: const AppDrawer(),
+        body: BlocBuilder<DashboardCubit, DashboardState>(
+          builder: (context, state) {
+            return
 
-            SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header
-                DashboardHeader(
-                  onMenuTap: () => Scaffold.of(context).openDrawer(),
-                ),
+              SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  DashboardHeader(
+                    onMenuTap: () => Scaffold.of(context).openDrawer(),
+                  ),
 
-                // Balance Card
-                BalanceCard(totalBalance: state.balance,
-                    monthlyExpenses: state.totalExpenses,
-                    monthlySavings: state.totalIncome),
+                  // Balance Card
+                  BalanceCard(totalBalance: state.balance,
+                      monthlyExpenses: state.totalExpenses,
+                      monthlySavings: state.totalIncome),
 
-                // Recent Transactions
-                state.status == DashboardStatus.loading ? const Center(child: CircularProgressIndicator()) :
-                state.status == DashboardStatus.error ? Center(child: Text(state.errorMessage ?? 'An error occurred')) :
-                RecentTransactions(recentTransactions: state.recentTransactions),
+                  // Recent Transactions
+                  state.status == DashboardStatus.loading ? const Center(child: CircularProgressIndicator()) :
+                  state.status == DashboardStatus.error ? Center(child: Text(state.errorMessage ?? 'An error occurred')) :
+                  RecentTransactions(recentTransactions: state.recentTransactions),
 
-                // Quick Actions
-                QuickActions()
+                  // Quick Actions
+                  QuickActions()
 
-              ],
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.pushNamed(AppRoutes.addTransaction),
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, size: 28, color: Colors.white),
-      ),
-    ),
-);
+                ],
+              ),
+            );
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context.pushNamed(AppRoutes.addTransaction).then((_){
+              debugPrint('Returned from Add Transaction, refreshing dashboard...');
+              if (!mounted) return;
+              context.read<DashboardCubit>().loadRecent();});
+            },
+          backgroundColor: AppColors.primary,
+          child: const Icon(Icons.add, size: 28, color: Colors.white),
+        ),
+      );
   }
 }
 

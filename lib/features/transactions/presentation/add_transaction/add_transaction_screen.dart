@@ -98,7 +98,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             EasyLoading.show();
           }else if(state.status == TransactionStatus.success){
             EasyLoading.dismiss();
-            context.pop();
+            context.pop(true);
           }else if(state.status == TransactionStatus.error){
             EasyLoading.dismiss();
             ScaffoldMessenger.of(context).showSnackBar(

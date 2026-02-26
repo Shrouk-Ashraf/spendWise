@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../models/transaction_model.dart';
@@ -20,8 +21,12 @@ class TransactionDataSource {
     // 3. Add new transaction as Map to the list
     list.add(transaction.toMap());
 
+    debugPrint("list added is $list");
+
     // 4. Convert List → String and save
     await _prefs.setString(_key, jsonEncode(list));
+
+    debugPrint("saved json is ${_prefs.getString(_key)}");
   }
 
   // ── Get all transactions ──────────────────────────────────────────────────

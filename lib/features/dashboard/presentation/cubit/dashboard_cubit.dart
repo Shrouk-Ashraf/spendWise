@@ -11,6 +11,8 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   DashboardCubit(this._repository) : super(const DashboardState());
 
+  static DashboardCubit get(context) => context.read<DashboardCubit>();
+
   Future<void> loadRecent({int count = 10}) async {
     emit(state.copyWith(status: DashboardStatus.loading));
     final result = _repository.getRecent(count: count);

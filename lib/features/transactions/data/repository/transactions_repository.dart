@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import '../data_source/transaction_data_source.dart';
 import '../models/transaction_model.dart';
 
@@ -21,6 +22,7 @@ class TransactionRepository {
       await _dataSource.save(transaction);
       return const Right(null);
     } catch (e) {
+      debugPrint('Error saving transaction: ${e.toString()}');
       return Left('Failed to save transaction');
     }
   }

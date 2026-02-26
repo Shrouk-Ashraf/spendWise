@@ -14,6 +14,7 @@ import 'core/theme/app_colors.dart';
 import 'package:spendwise/core/theme/theme_cubit.dart';
 import 'package:spendwise/core/theme/theme_state.dart';
 import 'features/authentication/presentation/cubit/auth_cubit.dart';
+import 'features/dashboard/presentation/cubit/dashboard_cubit.dart';
 import 'features/transactions/presentation/add_transaction/cubit/add_transaction_cubit.dart';
 import 'firebase_options.dart';
 
@@ -60,6 +61,7 @@ class SpendWiseApp extends StatelessWidget {
             providers: [
               BlocProvider.value(value: sl<AuthCubit>()),
               BlocProvider.value(value: sl<ThemeCubit>()),
+              BlocProvider(create: (context) => sl<DashboardCubit>(),)
             ],
             child: BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, themeState) {

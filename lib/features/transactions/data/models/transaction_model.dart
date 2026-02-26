@@ -31,11 +31,22 @@ class TransactionModel {
       'category': category,
       'date':     date.millisecondsSinceEpoch,
       'notes':    notes,
-      'categoryIcon': categoryIcon,
+      // serialize IconData as primitives
+      'categoryIcon': {
+        'codePoint': categoryIcon.codePoint,
+        'fontFamily': categoryIcon.fontFamily,
+        'fontPackage': categoryIcon.fontPackage,
+        'matchTextDirection': categoryIcon.matchTextDirection,
+      },
     };
   }
 
   factory TransactionModel.fromMap(Map<String, dynamic> map) {
+    final iconMap = Map<String, dynamic>.from(map['categoryIcon'] ?? {});
+    final int codePoint = iconMap['codePoint'] ?? 0;
+    final String? fontFamily = iconMap['fontFamily'];
+    final String? fontPackage = iconMap['fontPackage'];
+    final bool matchTextDirection = iconMap['matchTextDirection'] ?? false;
     return TransactionModel(
       id:       map['id'],
       type:     map['type'],
@@ -43,7 +54,12 @@ class TransactionModel {
       category: map['category'],
       date:     DateTime.fromMillisecondsSinceEpoch(map['date']),
       notes:    map['notes'] ?? '',
-      categoryIcon: map['categoryIcon'] ?? Icons.category,
+      categoryIcon: IconData(
+        codePoint,
+        fontFamily: fontFamily,
+        fontPackage: fontPackage,
+        matchTextDirection: matchTextDirection,
+      )?? Icons.category,
     );
   }
 
